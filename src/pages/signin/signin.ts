@@ -23,6 +23,8 @@ export class SigninPage extends BasePage{
               public loadingCtrl: LoadingController) {
     super(alertCtrl, loadingCtrl);
 
+    this.navCtrl.push(HomePage);
+
     this.signinForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(this.emailRegex)])],
       password: ['', [Validators.required, Validators.minLength(6)]]

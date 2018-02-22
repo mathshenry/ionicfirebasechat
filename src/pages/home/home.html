@@ -1,11 +1,27 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Main Page
-    </ion-title>
-  </ion-navbar>
+  <custom-logged-header [title]="view | capitalize:true"></custom-logged-header>
+
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="view">
+      <ion-segment-button value="chats">Chats</ion-segment-button>
+      <ion-segment-button value="users">Users</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
 </ion-header>
 
 <ion-content padding>
-  <p>Welcome!!! :)))</p>
+  <div [ngSwitch]="view">
+    <ion-list *ngSwitchCase="'chats'" no-lines>
+      <ion-item>Chats</ion-item>
+    </ion-list>
+    <ion-list *ngSwitchCase="'users'" no-lines>
+      <ion-list>
+        <button ion-item *ngFor="let user of users | async" (click)="onChatCreate(user)">
+          {{user.name}}
+        </button>
+      </ion-list>
+    </ion-list>
+  </div>
+
 </ion-content>

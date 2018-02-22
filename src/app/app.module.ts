@@ -14,6 +14,10 @@ import {AngularFireAuthModule} from "angularfire2/auth";
 import {AngularFireDatabaseModule} from "angularfire2/database";
 import {HttpClientModule} from "@angular/common/http";
 import {SigninPage} from "../pages/signin/signin";
+import {CustomLoggedHeaderComponent} from "../components/custom-logged-header/custom-logged-header";
+import {CapitalizePipe} from "../pipes/capitalize/capitalize";
+import {ChatPage} from "../pages/chat/chat";
+import { ChatProvider } from '../providers/chat/chat.provider';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyAcXRiqUoTWS-_ONzSkeEWMqGvFAPhEW6g",
@@ -26,6 +30,9 @@ const firebaseAppConfig: FirebaseAppConfig = {
 
 @NgModule({
   declarations: [
+    CapitalizePipe,
+    ChatPage,
+    CustomLoggedHeaderComponent,
     MyApp,
     HomePage,
     SignupPage,
@@ -41,6 +48,7 @@ const firebaseAppConfig: FirebaseAppConfig = {
   ],
   bootstrap: [IonicApp],
   entryComponents: [
+    ChatPage,
     MyApp,
     HomePage,
     SignupPage,
@@ -51,6 +59,7 @@ const firebaseAppConfig: FirebaseAppConfig = {
     SplashScreen,
     UserProvider,
     AuthProvider,
+    ChatProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

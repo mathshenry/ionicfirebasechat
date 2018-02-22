@@ -2,22 +2,26 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 
 import {Observable} from 'rxjs';
-import { map } from 'rxjs/operators/map';
 
-import {AngularFireDatabase} from "angularfire2/database";
+import {AngularFireDatabase, AngularFireObject} from "angularfire2/database";
 import {User} from "../../models/user.model";
 import {BaseProvider} from "../base/base.provider";
 
 import * as firebase from 'firebase/app';
+import {AngularFireAuth} from "angularfire2/auth";
 
 @Injectable()
 export class UserProvider extends BaseProvider {
 
-  // private users: Observable<User[]>;
+  users: Observable<User[]>;
+  currentUser: AngularFireObject<User>;
 
   constructor(public http: HttpClient,
-              public afDb: AngularFireDatabase) {
+              public afDb: AngularFireDatabase,
+              public afAuth: AngularFireAuth) {
     super();
+
+    this.listenAuthState();
 
     // this.users = this.afDb.list<User>('users');
 
@@ -35,9 +39,31 @@ export class UserProvider extends BaseProvider {
         (ref: firebase.database.Reference) => ref.orderByChild('username').equalTo(username)
       )
       .valueChanges()
-      .map((users: User[]) =>{
-        return users.length>0;
+      .map((users: User[]) => {
+        return users.length > 0;
       }).catch(this.handlePromiseError);
+  }
+
+  private listenAuthState(): void {
+    this.afAuth
+      .authState
+      .subscribe((authUser: firebase.User) => {
+        if (authUser) {
+          console.log('Auth state alterado!');
+          this.currentUser = this.afDb.object(`/users/${authUser.uid}`);
+          this.setUsers(authUser.uid);
+        }
+      });
+  }
+
+  private setUsers(uidToExclude: string): void {
+    this.users = this.mapListKeys<User>(
+      this.afDb.list<User>('/users',
+        (ref: firebase.database.Reference) => ref.orderByChild('name')
+      )
+    ).map((users: User[]) => {
+      return users.filter((user: User) => user.$key !== uidToExclude);
+    });
   }
 
 }

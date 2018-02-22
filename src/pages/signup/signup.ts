@@ -55,9 +55,9 @@ export class SignupPage extends BasePage {
           }).then((authUser: firebase.User) => {
 
             delete formUser.password;
-            formUser.uid = authUser.uid;
+            let uuid: string = authUser.uid;
 
-            this.userProvider.create(formUser, formUser.uid)
+            this.userProvider.create(formUser, uuid)
               .then(() => {
                 loading.dismiss();
                 this.showAlert('User signed up with success!');

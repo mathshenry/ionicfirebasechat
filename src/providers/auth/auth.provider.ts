@@ -26,4 +26,18 @@ export class AuthProvider extends BaseProvider {
       }).catch(this.handlePromiseError);
   }
 
+  logout(): Promise<void>{
+    return this.afAuth.auth.signOut();
+  }
+
+  get authenticated(): Promise<boolean>{
+    return new Promise<boolean>((resolve, reject) =>{
+      this.afAuth.authState
+        .first()
+        .subscribe((authUser: firebase.User) => {
+          (authUser) ? resolve(true) : reject(false);
+        });
+    });
+  }
+
 }

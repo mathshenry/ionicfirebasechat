@@ -1,10 +1,5 @@
-import { Component } from '@angular/core';
-import {AlertController, IonicPage, Loading, LoadingController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, Loading, LoadingController} from 'ionic-angular';
 
-@Component({
-  selector: 'page-base',
-  templateUrl: 'base.html',
-})
 export abstract class BasePage {
 
   constructor(
