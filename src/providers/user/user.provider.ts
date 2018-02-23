@@ -29,12 +29,21 @@ export class UserProvider extends BaseProvider {
   }
 
   create(user: User): Promise<void> {
+    if(!user.photo){
+      user.photo = 'assets/imgs/no-photo.jpg';
+    }
     return this.afDb.object(`/users/${user.key}`)
       .set(user)
       .catch(this.handlePromiseError);
   }
 
-  getUserById(userId: string): AngularFireObject<User>{
+  edit(user: { name: string, username: string, photo: string }): Promise<void>{
+    return this.currentUser
+      .update(user)
+      .catch(this.handlePromiseError);
+  }
+
+  getUserById(userId: string): AngularFireObject<User> {
     return this.afDb.object<User>(`/users/${userId}`);
   }
 

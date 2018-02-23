@@ -37,14 +37,42 @@ export class HomePage {
     this.chats = this.chatProvider.chats;
   }
 
+  filterItems(event: any): void {
+    let searchTerm: string = event.target.value;
+
+    this.chats = this.chatProvider.chats;
+    this.users = this.userProvider.users;
+
+    if (searchTerm) {
+      switch (this.view) {
+        case 'chats':
+          this.chats = this.chats
+            .map((chats: Chat[]) => {
+              return chats.filter((chat: Chat) => {
+                return chat.title.toLocaleLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+              });
+            });
+          break;
+        case 'users':
+          this.users = this.users
+            .map((users: User[]) => {
+              return users.filter((user: User) => {
+                return user.name.toLocaleLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+              });
+            });
+          break;
+      }
+    }
+
+  }
+
   onSignup(): void {
     this.navCtrl.push(SignupPage);
   }
 
-  onChatOpen(chat: Chat): void{
-    let recipientUserId = chat.otherUid;
+  onChatOpen(chat: Chat): void {
 
-    this.userProvider.getUserById(recipientUserId)
+    this.userProvider.getUserById(chat.otherUid)
       .valueChanges()
       .first()
       .subscribe((user: User) => {
@@ -65,7 +93,7 @@ export class HomePage {
           .mapObjectKey<Chat>(this.chatProvider.getDeepChat(currentUser.key, recipientUser.key))
           .first()
           .subscribe((chat: Chat) => {
-            if(!chat.title){
+            if (!chat.title) {
 
               let timestamp: Object = firebase.database.ServerValue.TIMESTAMP;
 

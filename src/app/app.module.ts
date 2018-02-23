@@ -20,6 +20,9 @@ import {ChatPage} from "../pages/chat/chat";
 import {ChatProvider} from '../providers/chat/chat.provider';
 import {MessageProvider} from '../providers/message/message.provider';
 import {MessageBoxComponent} from "../components/message-box/message-box";
+import {UserInfoComponent} from "../components/user-info/user-info";
+import {UserMenuComponent} from "../components/user-menu/user-menu";
+import {UserProfilePage} from "../pages/user-profile/user-profile";
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyAcXRiqUoTWS-_ONzSkeEWMqGvFAPhEW6g",
@@ -39,7 +42,10 @@ const firebaseAppConfig: FirebaseAppConfig = {
     HomePage,
     MessageBoxComponent,
     SignupPage,
-    SigninPage
+    SigninPage,
+    UserInfoComponent,
+    UserMenuComponent,
+    UserProfilePage
   ],
   imports: [
     BrowserModule,
@@ -55,7 +61,8 @@ const firebaseAppConfig: FirebaseAppConfig = {
     MyApp,
     HomePage,
     SignupPage,
-    SigninPage
+    SigninPage,
+    UserProfilePage
   ],
   providers: [
     StatusBar,
