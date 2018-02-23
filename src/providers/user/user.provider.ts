@@ -9,6 +9,7 @@ import {BaseProvider} from "../base/base.provider";
 
 import * as firebase from 'firebase/app';
 import {AngularFireAuth} from "angularfire2/auth";
+import {FirebaseObjectObservable} from "angularfire2/database-deprecated";
 
 @Injectable()
 export class UserProvider extends BaseProvider {
@@ -27,10 +28,14 @@ export class UserProvider extends BaseProvider {
 
   }
 
-  create(user: User, uuid: string): Promise<void> {
-    return this.afDb.object(`/users/${uuid}`)
+  create(user: User): Promise<void> {
+    return this.afDb.object(`/users/${user.key}`)
       .set(user)
       .catch(this.handlePromiseError);
+  }
+
+  getUserById(userId: string): AngularFireObject<User>{
+    return this.afDb.object<User>(`/users/${userId}`);
   }
 
   userExists(username: string): Observable<boolean> {
@@ -62,7 +67,7 @@ export class UserProvider extends BaseProvider {
         (ref: firebase.database.Reference) => ref.orderByChild('name')
       )
     ).map((users: User[]) => {
-      return users.filter((user: User) => user.$key !== uidToExclude);
+      return users.filter((user: User) => user.key !== uidToExclude);
     });
   }
 

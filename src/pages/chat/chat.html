@@ -8,7 +8,7 @@
 <ion-content padding>
 
   <ion-list no-lines>
-    <ion-item *ngFor="let m of messages">{{m}}</ion-item>
+    <message-box *ngFor="let m of viewMessages | async" [message]="m" [isFromSender]="(m.userId === sender.key)"></message-box>
   </ion-list>
 
 </ion-content>
@@ -17,7 +17,7 @@
 
   <ion-toolbar>
     <ion-item no-lines>
-      <ion-input type="text" placeholder="Message..." [(ngModel)]="newMessage"></ion-input>
+      <ion-input #txtMessage type="text" placeholder="Message..." [(ngModel)]="newMessage"></ion-input>
       <button ion-button item-right (keyup.enter)="sendMessage(newMessage); newMessage=''" (click)="sendMessage(newMessage); newMessage=''">
         <ion-icon name="send"></ion-icon>
       </button>

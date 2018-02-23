@@ -17,7 +17,9 @@ import {SigninPage} from "../pages/signin/signin";
 import {CustomLoggedHeaderComponent} from "../components/custom-logged-header/custom-logged-header";
 import {CapitalizePipe} from "../pipes/capitalize/capitalize";
 import {ChatPage} from "../pages/chat/chat";
-import { ChatProvider } from '../providers/chat/chat.provider';
+import {ChatProvider} from '../providers/chat/chat.provider';
+import {MessageProvider} from '../providers/message/message.provider';
+import {MessageBoxComponent} from "../components/message-box/message-box";
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyAcXRiqUoTWS-_ONzSkeEWMqGvFAPhEW6g",
@@ -35,6 +37,7 @@ const firebaseAppConfig: FirebaseAppConfig = {
     CustomLoggedHeaderComponent,
     MyApp,
     HomePage,
+    MessageBoxComponent,
     SignupPage,
     SigninPage
   ],
@@ -60,7 +63,9 @@ const firebaseAppConfig: FirebaseAppConfig = {
     UserProvider,
     AuthProvider,
     ChatProvider,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    MessageProvider
   ]
 })
-export class AppModule {}
+export class AppModule {
+}
