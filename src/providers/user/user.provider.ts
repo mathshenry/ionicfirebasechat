@@ -3,13 +3,16 @@ import {Injectable} from '@angular/core';
 
 import {Observable} from 'rxjs';
 
+import {FirebaseApp} from "angularfire2";
 import {AngularFireDatabase, AngularFireObject} from "angularfire2/database";
 import {User} from "../../models/user.model";
 import {BaseProvider} from "../base/base.provider";
 
 import * as firebase from 'firebase/app';
 import {AngularFireAuth} from "angularfire2/auth";
-import {FirebaseObjectObservable} from "angularfire2/database-deprecated";
+import 'firebase/storage';
+import {UploadTask} from "@firebase/storage-types";
+
 
 @Injectable()
 export class UserProvider extends BaseProvider {
@@ -19,7 +22,8 @@ export class UserProvider extends BaseProvider {
 
   constructor(public http: HttpClient,
               public afDb: AngularFireDatabase,
-              public afAuth: AngularFireAuth) {
+              public afAuth: AngularFireAuth,
+              public firebaseApp: FirebaseApp) {
     super();
 
     this.listenAuthState();
@@ -29,7 +33,7 @@ export class UserProvider extends BaseProvider {
   }
 
   create(user: User): Promise<void> {
-    if(!user.photo){
+    if (!user.photo) {
       user.photo = 'assets/imgs/no-photo.jpg';
     }
     return this.afDb.object(`/users/${user.key}`)
@@ -37,7 +41,7 @@ export class UserProvider extends BaseProvider {
       .catch(this.handlePromiseError);
   }
 
-  edit(user: { name: string, username: string, photo: string }): Promise<void>{
+  edit(user: { name: string, username: string, photo: string }): Promise<void> {
     return this.currentUser
       .update(user)
       .catch(this.handlePromiseError);
@@ -78,6 +82,14 @@ export class UserProvider extends BaseProvider {
     ).map((users: User[]) => {
       return users.filter((user: User) => user.key !== uidToExclude);
     });
+  }
+
+  uploadPhoto(file: File, userId: string): UploadTask {
+    return this.firebaseApp
+      .storage()
+      .ref()
+      .child(`/users/${userId}`)
+      .put(file);
   }
 
 }

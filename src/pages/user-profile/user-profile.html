@@ -35,6 +35,11 @@
         minlength="3"></ion-input>
     </ion-item>
 
+    <ion-item>
+      <ion-icon name="image" item-end></ion-icon>
+      <input type="file" (change)="onPhoto($event)">
+    </ion-item>
+
     <button ion-button block type="submit" [disabled]="profileForm.form.invalid">Save</button>
 
   </form>
